@@ -1,2 +1,2 @@
 # Threat Weaver
-A comprehensive python toolkit for Malware Scanning, File Hashing, File Encryption, Packet Crafting, and Network Forensics.
+A comprehensive python toolkit for Malware Scanning, File Hashing, File Encryption and Decryption, Packet Crafting, and Network Forensics.
