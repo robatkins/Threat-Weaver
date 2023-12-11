@@ -1,38 +1,21 @@
-import socket
+import scapy.all as scapy
 
-#PACKETPAL
-#Network Custom Packet Sending Toolkit
+#Packet Pal
+#Captures packets and saves them to a .pcap file when finished.
 
-def send_udp_packet(ip_address, port, message, num_packets):
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+output_file = "captured_packets.pcap"
 
-    for _ in range(num_packets):
-        udp_socket.sendto(message.encode(), (ip_address, port))
+def packet_callback(packet):
+    try:
+        # Save the packet to the PCAP file
+        scapy.wrpcap(output_file, [packet], append=True)
+        print(f"Packet captured and saved to {output_file}")
+    except Exception as e:
+        print(f"Error saving packet to PCAP file: {e}")
 
-    udp_socket.close()
+# Start sniffing
+try:
+    scapy.sniff(prn=packet_callback, store=0)
+except KeyboardInterrupt:
+    print("\nUser interrupted. Exiting...")
 
-def send_tcp_packet(ip_address, port, message):
-    tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    tcp_socket.connect((ip_address, port))
-    tcp_socket.send(message.encode())
-    tcp_socket.close()
-
-if __name__ == "__main__":
-    print("Packet Pal ~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    # Get user input for target IP address and port
-    target_ip = input("Enter the target IP address: ")
-    target_port = int(input("Enter the target port: "))
-
-    # Get user input for the message and number of packets to send
-    message_to_send = input("Enter the message to send: ")
-    num_packets_to_send = int(input("Enter the number of packets to send: "))
-
-    # Ask the user which packet to send
-    protocol_choice = input("Enter 'udp' or 'tcp' to choose the protocol: ").lower()
-
-    if protocol_choice == 'udp':
-        send_udp_packet(target_ip, target_port, message_to_send, num_packets_to_send)
-    elif protocol_choice == 'tcp':
-        send_tcp_packet(target_ip, target_port, message_to_send)
-    else:
-        print("Invalid protocol choice. Please enter 'udp' or 'tcp'.")
