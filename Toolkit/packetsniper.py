@@ -1,7 +1,7 @@
 import socket
 
 #PACKETSNIPER
-#Network Custom Packet Sending Toolkit
+#Custom Packet Sending Toolkit
 
 def send_udp_packet(ip_address, port, message, num_packets):
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
